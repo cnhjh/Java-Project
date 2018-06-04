@@ -1,0 +1,695 @@
+回顾:
+1.内存管理:JVM
+  1)堆:new出来的对象(包括成员变量)
+  2)栈:正在调用中的方法中的所有局部变量(包括参数)
+  3)方法区:.class字节码文件(包括方法)
+2.继承:
+    代码的复用、extends、
+	父:共有的  子:特有的
+	子继承父后，子具有:父+子
+	单一继承、传递性
+	构造子之前必须先构造父
+	  子构造中若不调父的构造，则默认super()调父类无参构造
+	  若子类中调了父类的构造，则不再默认提供
+3.super:指代当前对象的父类对象
+    super.成员变量-----访问父类的成员变量
+	super.方法()--------调用父类的方法
+	super()-------------调用父类的构造方法
+4.向上造型:
+  1)父类型的引用指向子类的对象
+  2)能点出来什么，看引用的类型
+
+
+
+
+
+
+
+
+
+笔记:
+1.方法的重写(Override):重新写、覆盖
+  1)发生在父子类中，方法名称相同，参数列表相同，方法体不同
+  2)重写方法被调用时，看对象的类型
+2.重写与重载的区别:--------------常见面试题
+  1)重写(Override):
+    1.1)发生在父子类中，方法名称相同，参数列表相同，方法体不同
+	1.2)遵循"运行期"绑定，根据对象的类型来调用方法
+  2)重载(Overload):
+    2.1)发生在一个类中，方法名称相同，参数列表不同，方法体不同
+	2.2)遵循"编译期"绑定，根据参数(引用)的类型来绑定方法
+3.package:
+  1)作用:避免类的命名冲突
+  2)包名可以有层次结构，类的全称: 包名.类名
+  3)同包中的类不能同名，但是不同包中的类是可以同名的
+  4)建议:包名所有字母都小写
+  import:
+  1)同包中的类可以直接访问
+    不同包的中类是不能直接访问的，想访问有两种方式:
+	1.1)先import再使用类---------建议
+	1.2)类的全称-----------------太繁琐，不建议
+4.访问控制修饰符:
+  1)public:公共的，任何类
+  2)private:私有的，本类
+  3)protected:受保护的，本类、子类、同包类
+  4)默认的:什么也不写，本类、同包类
+  类的访问修饰可以是public和默认的
+  类中成员的访问修饰如上4种都可以
+5.static:静态的
+  1)静态变量:
+    1.1)由static修饰
+	1.2)属于类，存储在方法区中，只有一份
+	1.3)常常通过类名点来访问
+	1.4)何时用:所有对象所共享的数据(图片、音频、视频等)
+  2)静态方法:
+    2.1)由static修饰
+	2.2)属于类的，存储在方法区中，只有一份
+	2.3)常常通过类名点来访问
+	2.4)静态方法没有隐式的this传递，
+	    静态方法中不能直接访问实例成员
+	2.5)何时用:方法的操作仅与参数相关而与对象无关
+  3)静态块:
+    3.1)由static修饰
+	3.2)属于类的，在类被加载期间自动执行的，
+	    因为类只被加载一次，所以静态块也只执行一次
+	3.3)何时用:加载/初始化静态资源(图片、音频、视频等)
+6.final:最终的、不可改变的
+  1)修饰变量:变量不能被改变
+  2)修饰方法:方法不能被重写
+  3)修饰类:类不能被继承
+7.static final常量: 自学
+
+
+练习:
+1)完成FinalDemo
+2)完成StaticDemo
+3)完成OverrideDemo
+4)完成OverrideOverloadDemo、访问控制修饰符
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FinalDemo
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cell c1 = new Cell(2,5);
+c1.drop();-------------------c1.row=3
+
+Cell c2 = new Cell(5,8);
+c2.drop();-------------------c2.row=6
+
+
+
+class Cell{
+  int row;
+  int col;
+  void drop(){
+    row++;
+  }
+  void moveLeft(int n){
+    col-=n;
+  }
+  String getCellInfo(){
+    return row+","+col;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Arrays.sort(arr);
+
+假设sort()不是静态的
+无论a1,a2,a3,...,a100中的哪一个对象
+去sort(arr)，最终的结果都是一样的
+说明sort()与对象无关而仅与参数有关
+
+
+Arrays a1 = new Arrays();
+a1.sort(arr);
+
+Arrays a2 = new Arrays();
+a2.sort(arr);
+
+Arrays a3 = new Arrays();
+a3.sort(arr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+double d = Math.sqrt(25);
+
+无论m1,m2,m3,...,m100中的哪一个对象，
+去sqrt(25)，最终的结果都是一样的
+说明sqrt()仅与参数相关，而与对象无关
+
+
+假设sqrt()不是静态的:
+Math m1 = new Math();
+double a = m1.sqrt(25);----------5
+
+Math m2 = new Math();
+double b = m2.sqrt(25);----------5
+
+Math m3 = new Math();
+double c = m3.sqrt(25);----------5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int a = scan.nextInt();
+double b = scan.nextDouble(); //实例方法
+
+double c = Math.random();
+double d = Math.sqrt(25);
+int[] a1 = Arrays.copyOf(a,6);
+Arrays.sort(arr);             //静态方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Koo{ 
+	int a; //对象点来访问
+	static int b; //类名点访问
+
+	void show(){ //传递this
+		System.out.println(this.a);
+		System.out.println(Koo.b);
+	}
+	static void test(){ //没有隐式this
+		System.out.println(a); //编译错误
+		System.out.println(Koo.b);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+所有对象的属性值，都一样----------------静态的
+所有对象的属性值，都不一样--------------实例的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cell c1 = new Cell();
+c1.row = 2;
+c1.col = 4;
+
+Cell c2 = new Cell();
+c2.row = 1;
+c2.col = 7;
+
+
+
+
+
+
+class Cell{
+  int row;
+  int col;
+}
+
+
+
+
+class Student{
+  String name;
+  int age;
+  String address;
+}
+
+
+
+
+
+
+
+
+
+
+map.jpg-------------------图片(只有一份)
+刚好遇见你.mp4------------音频(只有一份)
+变形金刚.avi--------------视频(只有一份)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+成员变量，分两种:
+1)实例变量:没有static修饰，属于对象的，存储在堆中，有几个对象就有几份
+           对象点来访问
+2)静态变量:由static修饰，属于类的，存储在方法区，只有一份
+           类名点来访问
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+oo.day04.vis
+Foo
+
+
+
+
+
+
+
+
+
+
+
+
+
+数据(变量)私有化(private)，行为(方法)公开化(public)
+
+
+
+调了一个方法()-----营业员做一系列复杂的业务(封装)
+
+
+保护数据，保护功能实现
+
+
+
+
+
+
+
+
+class Card{
+  private String cardId;
+  private String cardPwd;
+  private double balance;
+
+  public boolean payMoney(double money){
+    if(balance>=money){
+	  balance-=money;
+	  return true;
+	}else{
+	  return false;
+	}
+  }
+
+  public boolean checkPwd(String pwd){
+    if(pwd.equals(cardPwd)){
+	  return true;
+	}else{
+	  return false;
+	}
+  }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package java.util;
+class Scanner{
+  Scanner(Stream s){
+  }
+  int nextInt(){
+  }
+  double nextDouble(){
+  }
+  String next(){
+  }
+}
+
+import java.util.Scanner;
+Scanner scan = new Scanner(System.in);
+int a = scan.nextInt();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+double b = scan.nextDouble();
+String s = scan.next();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+多个公司合作完成一个项目的时候
+民生银行
+
+A公司:
+package a.b.c.d;
+class Aoo{
+}
+
+
+B公司:
+package a.b.c.d;
+class Aoo{
+}
+
+
+建议:
+  域名反写   .  项目名称 . 模块名称 . 类名
+  cn.tedu    .  aproject  . student  . 
+  cn.tedu    .  aproject  . teacher  . 
+
+
+
+
+
+
+
+  com.taobao .
+  com.baidu  .
+
+
+
+
+达内-------cn.tedu相同的
+A项目的一部分------------------cn.tedu.a
+
+放到B项目中去------------------cn.tedu.b
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package a.b.c.d.e.f;
+class Aoo{ //a.Aoo
+}
+
+
+package a.b.c.d.e.f;
+class Aoo{ //b.Aoo
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+项目-------------小区名
+包---------------楼号+单元号
+类---------------601
+
+
+
+
+
+
+
+
+
+
+
+
+OverrideOverloadDemo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+编译期--------------只检查语法
+
+
+
+
+
+
+
+
+
+我继承了一个中餐馆:
+1)继承后依然还做中餐--------------不用重写
+2)继承后想改为做西餐--------------重写(改成西餐)
+3)继承后想在中餐之上加西餐--------重写(先super调中餐,再加西餐)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Student zs = new Student();
+zs.name = "zhangsan";
+zs.age = 25;
+zs.address = "廊坊";
+zs.className = "JSD1706";
+zs.sayHi(); //zhangsan,25,廊坊,JSD1706
+
+Teacher ls = new Teacher();
+ls.name = "lisi";
+ls.age = 26;
+ls.address = "佳木斯";
+ls.salary = 5000;
+ls.sayHi(); //lisi,26,佳木斯,5000
+
+Doctor ww = new Doctor();
+ww.name = "wangwu";
+ww.age = 27;
+ww.address = "山东";
+ww.level = "主治医师";
+ww.sayHi(); //wangwu,27,山东
+
+
+Student zs = new Student();
+zs.sayHi();-----------------------调Student类的
+Person ls = new Student();
+ls.sayHi();-----------------------调Student类的
+
+
+class Person{
+  String name;
+  int age;
+  String address;
+  void sayHi(){
+    System.out.println(name+","+age+","+address);
+  }
+}
+class Student extends Person{
+  String className;
+  void sayHi(){
+    System.out.println(name+","+age+","+address+","+className);
+  }
+}
+class Teacher extends Person{
+  double salary;
+  void sayHi(){
+    System.out.println(name+","+age+","+address+","+salary);
+  }
+}
+class Doctor extends Person{
+  String level;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

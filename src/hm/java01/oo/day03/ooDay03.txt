@@ -1,0 +1,635 @@
+回顾:
+1.方法的重载(Overload):
+  1)在同一个类中，方法名称相同，参数列表不同
+  2)编译器在编译时自动根据方法的签名来绑定调用不同的方法
+2.构造方法:
+    给成员变量赋初值，与类同名，没有返回值类型
+	创建对象时被自动调用
+	若不写，则默认一个无参构造，若自己写了，则不再默认提供
+	可以重载
+3.this:哪个对象调用方法，指的就是哪个对象
+       方法中，方法中访问成员变量之前默认有个this.
+4.引用类型数组:
+    Cell[] cells = new Cell[4];
+	cells[0] = new Cell(2,5);
+
+	int[][] arr = new int[3][];
+	arr[0] = new int[2];
+
+
+
+
+
+
+笔记:
+1.内存管理:由JVM管理-----------了解
+  1)堆:
+    1.1)用于存储所有new出来的对象(包括成员变量)
+	1.2)垃圾:没有任何引用所指向的对象
+	    垃圾回收器(GC)不定时到内存中清扫垃圾，
+		并不一定一发现垃圾就立刻回收，
+		回收过程是透明的(看不到的)
+		通过调用System.gc()可以建议虚拟机尽快调度GC来回收
+	1.3)内存泄漏:不再使用的内存没有被及时的回收
+	    建议:不再使用的对象，及时将引用设置为null
+	1.4)成员变量的生命周期:
+	      创建对象时存储在堆中，对象被回收时一并被回收
+  2)栈:
+    2.1)用于存储正在调用的方法中的所有局部变量(包括参数)
+	2.2)JVM会为每一个正在调用的方法分配一块对应的栈帧，
+	    栈帧中存储方法中的局部变量(包括参数)，
+		方法调用结束时，栈帧被清除，局部变量一并被清除
+	2.3)局部变量的生命周期:
+	      调用方法时存在栈中，方法结束时与栈帧一并被清除
+  3)方法区:
+    3.1)用于存储.class字节码文件(包括方法)
+	3.2)方法只有一份，通过this来区分具体的对象
+2.继承:
+  1)作用:实现代码的复用
+  2)通过extends来实现继承
+  3)父类:所有子类所共有的属性和行为
+    子类:子类所特有的属性和行为
+  4)子类继承父类之后，子类将具有:子类的+父类的
+  5)一个父类可以有多个子类
+    一个子类只能有一个父类--------单一继承
+  6)继承具有传递性
+  7)java规定:构造子类之前必须先构造父类
+    子类构造中若自己不调用父类的构造，则默认super()调用父类的无参构造
+	若自己调用了父类的构造，则不再默认提供
+	super()调用父类构造，必须位于子类构造的第1句
+3.super:指代当前对象的父类对象
+  super的用法:
+    1)super.成员变量名------------访问父类的成员变量
+	2)super.方法名()--------------调用父类的方法
+	3)super()---------------------调用父类的构造方法
+4.向上造型:
+  1)父类型的引用指向子类的对象
+  2)能点出来什么，看引用的类型
+
+
+复用性好、扩展性好、维护性好
+
+练习:-----------------------oo.day04的包
+1)Cell类，包括:
+  1.1)属性: row,col
+  1.2)构造方法: Cell(int row,int col){}
+  1.3)方法: String getCellInfo(){}
+2)Tetromino父类，包括:
+  2.1)属性: cells
+  2.2)构造方法: Tetromino(){}
+  2.3)方法:drop(),moveLeft(),moveRight(),print()
+3)T类，继承Tetromino，包括:
+  3.1)构造方法: T(int row,int col){}
+4)J类，继承Tetromino，包括:
+  3.1)构造方法: J(int row,int col){}
+5)TJTest类，包括:
+  5.1)main()方法:创建对象，调用printWall()测试
+  5.2)printWall(Tetromino t){}-----打墙+打图形
+
+
+
+
+
+class Cell{
+}
+class Tetromino{
+}
+class T extends Tetromino{
+}
+class J extends Tetromino{
+}
+class TJTest{
+  main(){
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+UpTypeDemo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+M型
+
+
+
+
+
+
+
+
+
+
+
+
+
+Person p1 = new Student();
+Person p2 = new Teacher();
+Person p3 = new Doctor();
+
+Tetromino o1 = new T(); //向上造型
+Tetromino o2 = new J();
+Tetromino o3 = new L();
+Tetromino o4 = new O();
+Tetromino o5 = new I();
+Tetromino o6 = new S();
+Tetromino o7 = new Z();
+
+
+
+
+
+
+
+
+
+
+
+//动物是动物
+Animal o1 = new Animal();
+//老虎是老虎
+Tiger o2 = new Tiger();
+//老虎是动物
+Animal o3 = new Tiger(); //向上造型
+
+
+//动物是老虎------------------语义不通
+Tiger o4 = new Animal(); //编译错误
+
+
+class Animal{ //动物
+}
+class Tiger extends Animal{ //老虎
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+为何要重载?
+  T型参数，只能接收T型对象
+  J型参数，只能接收J型对象
+  L型参数，只能接收L型对象
+  O型参数，只能接收O型对象
+  I型参数，只能接收I型对象
+  S型参数，只能接收S型对象
+  Z型参数，只能接收Z型对象
+
+假设有一种类型--------Tetromino
+    既能接收T型对象
+	也能接收J型对象
+	也能接收L型对象
+	也能接收O型对象
+	也能接收I型对象
+	也能接收S型对象
+	也能接收Z型对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+何时打*:只要行列匹配就打*
+何时打-:4个格子都没配上时打-
+
+
+需要多次判断才能得到最终结果-------------开关
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public static void printWall(T t){
+	for(int i=0;i<20;i++){
+		for(int j=0;j<10;j++){
+			//效率高、扩展性差
+			if(i==t.cells[0].row && j==t.cells[0].col
+			   ||
+			   i==t.cells[1].row && j==t.cells[1].col
+			   ||
+			   i==t.cells[2].row && j==t.cells[2].col
+			   ||
+			   i==t.cells[3].row && j==t.cells[3].col){
+				System.out.print("* ");
+			}else{
+				System.out.print("- ");
+			}
+			
+		}
+		System.out.println();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tetromino
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+继承要符合is a的关系-----不能单单为了复用代码而继承
+
+class Dog{
+  String name;
+  int age;
+  String address;
+  void eat(){}
+  void sleep(){}
+  void play(){}
+}
+
+class Person extends Dog{ //不合理
+}
+
+
+class Animal{
+}
+class Tiger extends Animal{
+}
+class Dog extends Animal{
+}
+class Fish extends Animal{
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Aoo{
+  int a;
+}
+class Boo extends Aoo{
+  int b;
+}
+class Coo extends Boo{
+  int c;
+}
+
+Coo o = new Coo();
+o.c = 1;
+o.b = 2;
+o.a = 3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Student zs = new Student();
+zs.className/study();
+zs.name/age/address/eat()/sleep();
+
+class Person{-------------------------父类
+  String name;
+  int age;
+  String address;
+  void eat(){}
+  void sleep(){}
+}
+
+class Student extends Person{----------子类
+  String className;
+  void study(){}
+}
+class Teacher extends Person{----------子类
+  double salary;
+  void teach(){}
+}
+class Doctor extends Person{------------子类
+  String level;
+  void cut(){}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+程序中的继承:
+   代码不用自己写，自己也能用
+
+
+生活中的继承:
+1)继承财产:
+    钱不用自己挣，自己也能花
+2)继承皇位:
+    江山不用自己打，自己也能坐
+3)继承工作:
+    工作不用自己找，自己也能干
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cell c1 = new Cell();
+c1.row = 2;
+c1.col = 5;
+c1.drop();--------------c1.row=3
+
+Cell c2 = new Cell();
+c2.row = 6;
+c2.col = 4;
+c2.drop();--------------c2.row=7
+
+
+drop()中一定是能区分出c1和c2的----------this
+
+class Cell{
+  int row;
+  int col;
+  void drop(){
+    row++;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+成员变量:
+1)存在类中，方法外
+2)创建对象时存在堆中，对象被回收时一并被回收
+3)有默认值
+
+局部变量:
+1)存在方法中
+2)调用方法时存在栈中，方法调用结束时被清除
+3)没有默认值
+
+
+Aoo o = new Aoo();--------------a=0
+o.show(5);----------------------b=5
+
+class Aoo{
+  int a;
+  void show(int b){
+    int c;
+	System.out.println(a); //0
+	System.out.println(b); //5
+	System.out.println(c); //编译错误
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GC(垃圾回收器)-----------回收垃圾的
+
+System.gc();------
+回收过程是透明的，看不到的
+
+
+
+C++:面向对象
+    对象的回收问题
+
+
+
+Java:面向对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+java程序，运行运行着，报内存不足(JVM的内存不足)
+中关村买了2G的内存条，装到电脑上
+再次运行，内存就足了吗?--------------依然不足
+如何解决?---------给JVM加内存才可以
+
+运维工程师
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class O{
+  Cell[] cells;
+  O(int row,int col){
+    cells = new Cell[4];
+    cells[0] = new Cell(row,col);
+	cells[1] = new Cell(row,col+1);
+	cells[2] = new Cell(row+1,col);
+	cells[3] = new Cell(row+1,col+1);
+  }
+  4个方法
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

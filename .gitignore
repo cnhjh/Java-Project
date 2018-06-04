@@ -1,0 +1,38 @@
+﻿# 编译文件
+*.class
+
+# package file 包文件
+#  *.jar  先不用 ，到时要提交支付宝jar包
+
+*.war
+*.ear
+
+#kdiff3 ignore
+*.orig
+
+#maven ignore   maven文件
+target/
+bin/
+
+#eclipse ignore    eclipse配置文件
+.settings/
+.project
+.classpath
+
+#idea     idea文件
+.idea/
+/idea/
+*.ipr
+*.iml
+*.iws
+
+# temp file 临时文件
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# systyem ignore 系统生成的临时文件
+.DS_Store
+Thumbs.db

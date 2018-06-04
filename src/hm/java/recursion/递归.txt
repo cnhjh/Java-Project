@@ -1,0 +1,8 @@
+Demo
+
+----------------递归recursion----------------
+Demo1:三角数字triangle
+Demo2:三角数字--------递归
+Demo3:三角数字演示递归详解
+Demo4:阶乘factorial
+Demo5:变位字
